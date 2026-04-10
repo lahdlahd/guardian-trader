@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model AgentIdentity {
+  id            String   @id @default(uuid())
+  name          String
+  walletAddress String
+  capabilities  String   // JSON array
+  status        String   @default("active")
+  registryTxHash String?
+  createdAt     DateTime @default(now())
+}
+
+model MarketSnapshot {
+  id          String   @id @default(uuid())
+  symbol      String
+  price       Float
+  ema50       Float
+  atr         Float
+  volumeRatio Float
+  support     Float
+  resistance  Float
+  regime      String
+  spread      Float
+  timestamp   DateTime @default(now())
+}
+
+model TradeIntent {
+  id           String   @id @default(uuid())
+  symbol       String
+  side         String
+  entry        Float
+  stopLoss     Float
+  takeProfit   Float
+  confidence   Float
+  thesis       String
+  invalidation String
+  proposedSize Float
+  status       String   @default("draft")
+  aiAnalysis   String?  // JSON
+  signature    String?
+  createdAt    DateTime @default(now())
+
+  guardianDecision GuardianDecision?
+  orderExecution   OrderExecution?
+}
+
+model GuardianDecision {
+  id             String   @id @default(uuid())
+  tradeIntentId  String   @unique
+  verdict        String
+  sizeMultiplier Float
+  riskScore      Int
+  checks         String   // JSON
+  reasons        String   // JSON
+  auditSummary   String
+  createdAt      DateTime @default(now())
+
+  tradeIntent TradeIntent @relation(fields: [tradeIntentId], references: [id])
+}
+
+model OrderExecution {
+  id               String   @id @default(uuid())
+  tradeIntentId    String   @unique
+  broker           String
+  mode             String
+  orderId          String
+  status           String
+  filledPrice      Float?
+  filledSize       Float?
+  slippageEstimate Float?
+  createdAt        DateTime @default(now())
+
+  tradeIntent TradeIntent @relation(fields: [tradeIntentId], references: [id])
+}
+
+model Position {
+  id         String    @id @default(uuid())
+  symbol     String
+  side       String
+  entryPrice Float
+  size       Float
+  stopLoss   Float
+  takeProfit Float
+  status     String    @default("open")
+  openedAt   DateTime  @default(now())
+  closedAt   DateTime?
+  pnl        Float?
+}
+
+model ValidationArtifact {
+  id             String   @id @default(uuid())
+  type           String
+  entityId       String
+  entityType     String
+  payload        String   // JSON
+  hash           String
+  score          Float?
+  registryStatus String   @default("pending")
+  actorId        String
+  summary        String
+  createdAt      DateTime @default(now())
+}
+
+model ReputationScore {
+  id              String   @id @default(uuid())
+  agentId         String
+  pnlScore        Float
+  drawdownScore   Float
+  validationScore Float
+  trustScore      Float
+  updatedAt       DateTime @default(now())
+}
+
+model DailyMetrics {
+  id             String @id @default(uuid())
+  date           String @unique
+  equity         Float
+  pnl            Float
+  drawdown       Float
+  blockedTrades  Int
+  approvedTrades Int
+  winRate        Float
+  sharpeLike     Float
+}
