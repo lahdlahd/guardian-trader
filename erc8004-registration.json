@@ -1,0 +1,33 @@
+{
+  "agentId": 2987,
+  "registry": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+  "owner": "0x0ac69d75Bc4DD3eDeBe4fC7b3bf63d78988ED8cb",
+  "registerTx": "0x8e66d00ef7fda8f570d0f9b53342aa465e82ea79f89ae307d83854db693d00eb",
+  "uriTx": "0x7cd6e55f7fec62e82c1be92cad0a20608729a37030987f83ffa66105cfe65da2",
+  "card": {
+    "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+    "name": "Guardian Trader",
+    "description": "Autonomous AI trading agent with risk-first Guardian validation. Every trade passes 10 deterministic risk checks before execution. BTC/USD & ETH/USD via Kraken.",
+    "services": [
+      {
+        "name": "web",
+        "endpoint": "https://guardian-trader.vercel.app"
+      }
+    ],
+    "active": true,
+    "registrations": [
+      {
+        "agentId": 2987,
+        "agentRegistry": "eip155:11155111:0x8004A818BFB912233c491871b3d84c89A494BD9e"
+      }
+    ],
+    "capabilities": [
+      "spot_trading",
+      "risk_management",
+      "signal_detection",
+      "ai_analysis",
+      "guardian_validation",
+      "paper_trading"
+    ]
+  }
+}
